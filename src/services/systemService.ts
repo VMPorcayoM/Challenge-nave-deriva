@@ -22,16 +22,42 @@ export const phaseChange = (pressure: number) => {
   }
   // Buscar los volúmenes específicos en la curva de saturación
   let vol_liquid: number, vol_vapor: number;
-  if (SATURATION_DATA.saturation_curve.hasOwnProperty(pressure)) {
-    [vol_liquid, vol_vapor] = SATURATION_DATA.saturation_curve[pressure as keyof typeof SATURATION_DATA.saturation_curve];
+  if (pressure >= SATURATION_DATA.pressure_critical) {
+    // Si la presión es mayor o igual a la crítica, devolver el punto crítico
+    vol_liquid = vol_vapor = SATURATION_DATA.volume_critical;
   } else {
-    // Si la presión no está en los datos, devolver el punto crítico
-    if (pressure >= SATURATION_DATA.pressure_critical) {
-      vol_liquid = vol_vapor = SATURATION_DATA.volume_critical;
-    } else {
-      // Interpolar entre los puntos más cercanos (opcional)
-      vol_liquid = vol_vapor = SATURATION_DATA.volume_critical;
-    }
+    // Si la presión es menor que la crítica, interpolar entre los puntos conocidos
+    const [p0, [v_l0, v_v0]] = Object.entries(
+      SATURATION_DATA.saturation_curve
+    )[0]; // Punto de baja presión
+    const [p1, [v_l1, v_v1]] = Object.entries(
+      SATURATION_DATA.saturation_curve
+    )[1]; // Punto crítico
+
+    vol_liquid = interpolate(
+      pressure,
+      parseFloat(p0),
+      v_l0,
+      parseFloat(p1),
+      v_l1
+    );
+    vol_vapor = interpolate(
+      pressure,
+      parseFloat(p0),
+      v_v0,
+      parseFloat(p1),
+      v_v1
+    );
   }
-  return {vol_liquid, vol_vapor};
+  return { vol_liquid, vol_vapor };
+};
+// Función para interpolar linealmente
+const interpolate = (
+  x: number,
+  x0: number,
+  y0: number,
+  x1: number,
+  y1: number
+): number => {
+  return y0 + ((x - x0) * (y1 - y0)) / (x1 - x0);
 };
