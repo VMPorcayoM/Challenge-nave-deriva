@@ -6,4 +6,5 @@ const router = (0, express_1.Router)();
 router.get("/status", statusController_1.getStatus);
 router.get("/repair-bay", statusController_1.getRepairBay);
 router.post("/teapot", statusController_1.postTeapot);
+router.get("/phase-change-diagram", statusController_1.phaseChangeDiagram);
 exports.default = router;

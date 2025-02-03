@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.postTeapot = exports.getRepairBay = exports.getStatus = void 0;
+exports.phaseChangeDiagram = exports.postTeapot = exports.getRepairBay = exports.getStatus = void 0;
 const systemService_1 = require("../services/systemService");
 const getStatus = (req, res) => {
     res.json({ damaged_system: (0, systemService_1.getDamagedSystem)() });
@@ -27,3 +27,19 @@ const postTeapot = (req, res) => {
     res.status(418).send("I'm a teapot");
 };
 exports.postTeapot = postTeapot;
+const phaseChangeDiagram = (req, res) => {
+    try {
+        // Obtener la presión del query parameter
+        const pressure = parseFloat(req.query.pressure);
+        const { vol_liquid, vol_vapor } = (0, systemService_1.phaseChange)(pressure);
+        // Devolver la respuesta
+        res.json({
+            specific_volume_liquid: vol_liquid,
+            specific_volume_vapor: vol_vapor,
+        });
+    }
+    catch (error) {
+        res.status(400).send("Error: " + error);
+    }
+};
+exports.phaseChangeDiagram = phaseChangeDiagram;
