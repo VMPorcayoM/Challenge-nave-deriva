@@ -1,5 +1,10 @@
 import { Router } from "express";
-import { getStatus, getRepairBay, postTeapot, phaseChangeDiagram } from "../controllers/statusController";
+import {
+  getStatus,
+  getRepairBay,
+  postTeapot,
+  phaseChangeDiagram
+} from "../controllers/statusController";
 
 const router = Router();
 

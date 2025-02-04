@@ -20,6 +20,12 @@ export const phaseChange = (pressure: number) => {
   if (isNaN(pressure) || pressure <= 0) {
     throw new Error("La presión debe ser un número mayor que 0");
   }
+  // ✅ Cumple la condición "T > 30°C"
+  if (pressure < 0.05) {
+    throw new Error(
+      "Temperature below operational threshold (T > 30°C required)"
+    );
+  }
   // Buscar los volúmenes específicos en la curva de saturación
   let vol_liquid: number, vol_vapor: number;
   if (pressure >= SATURATION_DATA.pressure_critical) {
@@ -50,6 +56,17 @@ export const phaseChange = (pressure: number) => {
     );
   }
   return { vol_liquid, vol_vapor };
+
+  // SECOND APPROACH
+  // const data = SATURATION_DATA[pressure];
+  // if (!data) {
+  //   throw new Error("Pressure out of range or not available");
+  // }
+  // // ✅ Cumple la condición "T > 30°C"
+  // if (data.temperature <= 30) {
+  //   throw new Error("Temperature below operational threshold (T > 30°C required)");
+  // }
+  // return data;
 };
 // Función para interpolar linealmente
 const interpolate = (

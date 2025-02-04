@@ -16,3 +16,9 @@ export const SATURATION_DATA = {
         10.0: [0.0035, 0.0035],  // Punto crítico
     }
 };
+
+// SECOND APPROACH
+// export const SATURATION_DATA: Record<number, { vol_liquid: number; vol_vapor: number; temperature: number }> = {
+//   0.05: { vol_liquid: 0.00105, vol_vapor: 30.0, temperature: 31 }, // > 30°C ✅
+//   10: { vol_liquid: 0.0035, vol_vapor: 0.0035, temperature: 500 }, // Punto crítico ✅
+// };
